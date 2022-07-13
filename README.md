@@ -22,3 +22,10 @@ In the project directory, you can run:
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+________________________________________________________
+
+## Dockerfile -> contains code to dockerise application
+## main.tf -> terraform code for the IAC
+## config.yml -> workflows and commands for CircleCI
+________________________________________________________
