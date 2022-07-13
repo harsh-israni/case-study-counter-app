@@ -16,3 +16,4 @@ workflows:
             - aws-ecr/build-and-push-image
           family: 'counter-app-service'
           cluster: 'couner-app-cluster'
+          container-image-name-updates: 'container=counter-app-service,tag=${CIRCLE_SHA1}'
