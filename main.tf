@@ -2,7 +2,7 @@ provider "aws" {
   version = "~> 2.70"
   region  = "us-east-1"
 }
-
+/*==== VPC ======*/
 resource "aws_vpc" "vpc" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = true
@@ -120,15 +120,15 @@ resource "aws_security_group" "default" {
     Environment = "${var.environment}"
   }
 }
-
+/*==== ECR REPO ======*/
 resource "aws_ecr_repository" "counter_app_ecr_repo" {
   name = "counter-app-ecr-repo"
 }
-
+/*==== ECS CLUSTER ======*/
 resource "aws_ecs_cluster" "counter_app_cluster" {
   name = "couner-app-cluster" 
 }
-
+/* Task Definition */
 resource "aws_ecs_task_definition" "counter_app_task" {
   family                   = "counter-app-task"
   container_definitions    = <<DEFINITION
@@ -154,7 +154,7 @@ resource "aws_ecs_task_definition" "counter_app_task" {
   cpu                      = 256         # Specifying the CPU our container requires
   execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
 }
-
+/* ECS IAM role */
 resource "aws_iam_role" "ecsTaskExecutionRole" {
   name               = "ecsTaskExecutionRole"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
@@ -175,16 +175,15 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
-
+/*==== ALB ======*/
 resource "aws_alb" "application_load_balancer" {
-  name               = "counter-app-lb-tf" # load balancer
+  name               = "counter-app-lb-tf"  #Load balancer Name
   load_balancer_type = "application"
-  subnets =  "${aws_subnet.private_subnet.*.id}"
-  # Referencing the security group
+  subnets =  "${aws_subnet.private_subnet.*.id}"  # Referencing the security group
   security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
 }
 
-# Creating a security group for the load balancer:
+/* Creating a security group for the load balancer */
 resource "aws_security_group" "load_balancer_security_group" {
   ingress {
     from_port   = 80
@@ -200,7 +199,7 @@ resource "aws_security_group" "load_balancer_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
+/* Creating a target group for load balancer */
 resource "aws_lb_target_group" "target_group" {
   name        = "target-group"
   port        = 80
@@ -208,7 +207,7 @@ resource "aws_lb_target_group" "target_group" {
   target_type = "ip"
   vpc_id      = "${aws_vpc.vpc.id}" # Referencing the VPC
 }
-
+/* Listener for LB */
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = "${aws_alb.application_load_balancer.arn}" # Referencing our load balancer
   port              = "80"
@@ -218,7 +217,7 @@ resource "aws_lb_listener" "listener" {
     target_group_arn = "${aws_lb_target_group.target_group.arn}" # Referencing our target group
   }
 }
-
+/*==== ECS ======*/
 resource "aws_ecs_service" "counter_app_service" {
   name            = "counter-app-service"                            
   cluster         = "${aws_ecs_cluster.counter_app_cluster.id}"             # Referencing our created Cluster
