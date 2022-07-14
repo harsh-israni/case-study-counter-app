@@ -14,6 +14,8 @@ jobs:
           aws-access-key-id: $AWS_ACCESS_KEY_ID
           aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
           aws-region: $AWS_REGION
+      - aws-ecs/update-task-definition-from-json:
+          task-definition-json: my-app-definition.json 
       - run:
           name: Get last task definition
           command: >
