@@ -15,12 +15,12 @@ variable "vpc_cidr" {
 
 variable "public_subnets_cidr" {
   description = "cidr block for public subnet"
-  
+  type        = list
 }
 
 variable "private_subnets_cidr" {
   description = "cidr block for private subnet"
-
+ type        = list
 }
 
 variable "availability_zones" {
