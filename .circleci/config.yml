@@ -20,7 +20,7 @@ jobs:
           name: Get last task definition
           command: >
             TASK_DEFINITION_ARN=$(aws ecs describe-task-definition \
-                --task-definition "counter-app-task" \
+                --task-definition counter-app-task \
                 --output text \
                 --query 'taskDefinition.taskDefinitionArn')
             echo "export TASK_DEFINITION_ARN='${TASK_DEFINITION_ARN}'" >>
@@ -35,6 +35,9 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
+      - aws-ecr/build-and-push-image:
+          repo: 'counter-app-ecr-repo'
+          tag: 'latest'
       - aws-ecs/deploy-service-update: # orb built-in job
           requires:
             - aws-ecr/build-and-push-image
