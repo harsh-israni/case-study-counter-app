@@ -44,6 +44,7 @@ workflows:
           family: 'counter-app-service'
           cluster: 'couner-app-cluster'
           container-image-name-updates: 'container=counter-app-service,tag=latest'
-   test-workflow:
+
+test-workflow:
     jobs:
       - verify-deployment
