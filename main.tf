@@ -233,7 +233,7 @@ resource "aws_ecs_service" "counter_app_service" {
   }
 
   network_configuration {
-    subnets          = "${element(aws_subnet.private_subnet.*.id)}"
+    subnets          = "${(aws_subnet.private_subnet.*.id)}"
     assign_public_ip = true                                                # Providing our containers with public IPs
     security_groups  = ["${aws_security_group.service_security_group.id}"] # Setting the security group
   }
