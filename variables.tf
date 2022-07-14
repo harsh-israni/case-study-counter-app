@@ -10,7 +10,6 @@ variable "environment" {
 
 variable "vpc_cidr" {
   description = "cidr range of vpc"
-
 }
 
 variable "public_subnets_cidr" {
