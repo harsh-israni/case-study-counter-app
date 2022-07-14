@@ -25,7 +25,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ________________________________________________________
 
-## Dockerfile -> contains code to dockerise application
-## main.tf -> terraform code for the IAC
-## config.yml -> workflows and commands for CircleCI
+-- Dockerfile -> Contains code to dockerise application
+-- main.tf -> Terraform code for the IAC
+-- variables.tf -> Variables used in main.tf
+-- terraform.tfvars -> Terraform variables
+-- config.yml -> Workflows and commands for CircleCI
 ________________________________________________________
