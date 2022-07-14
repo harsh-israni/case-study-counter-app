@@ -8,14 +8,14 @@ orbs:
 jobs:
   verify-deployment:
     executor: aws-cli/default
+    docker:
+      - image: 'node:13.12.0-alpine'
     steps:
       - aws-cli/install
       - aws-cli/configure:
           aws-access-key-id: $AWS_ACCESS_KEY_ID
           aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
           aws-region: $AWS_REGION
-      - aws-ecs/update-task-definition-from-json:
-          task-definition-json: my-app-definition.json 
       - run:
           name: Get last task definition
           command: >
@@ -25,6 +25,8 @@ jobs:
                 --query 'taskDefinition.taskDefinitionArn')
             echo "export TASK_DEFINITION_ARN='${TASK_DEFINITION_ARN}'" >>
             $BASH_ENV
+      - aws-ecs/update-task-definition-from-json:
+          task-definition-json: counter-app-definition.json 
       - aws-ecs/verify-revision-is-deployed:
           family: 'counter-app-service'
           cluster: 'couner-app-cluster'
@@ -41,4 +43,7 @@ workflows:
             - aws-ecr/build-and-push-image
           family: 'counter-app-service'
           cluster: 'couner-app-cluster'
-          
+          container-image-name-updates: 'container=counter-app-service,tag=latest'
+   test-workflow:
+    jobs:
+      - verify-deployment
