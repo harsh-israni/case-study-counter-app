@@ -35,9 +35,6 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - aws-ecr/build-and-push-image:
-          repo: "counter-app-ecr-repo"
-          tag: "latest"
       - aws-ecs/deploy-service-update: # orb built-in job
           requires:
             - aws-ecr/build-and-push-image
