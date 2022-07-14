@@ -179,7 +179,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 resource "aws_alb" "application_load_balancer" {
   name               = "counter-app-lb-tf" # load balancer
   load_balancer_type = "application"
-  subnets =  "${aws_subnet.private_subnet,[count.index]}"
+  subnets =  "${aws_subnet.private_subnet.*.id}"
   # Referencing the security group
   security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
 }
