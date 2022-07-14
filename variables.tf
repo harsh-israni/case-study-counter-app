@@ -10,7 +10,7 @@ variable "environment" {
 
 variable "vpc_cidr" {
   description = "cidr range of vpc"
-  default = "us-east-1"
+
 }
 
 variable "public_subnets_cidr" {
